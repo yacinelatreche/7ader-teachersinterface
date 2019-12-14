@@ -6491,4 +6491,48 @@ body{
     display: flex;
     flex-direction: row;
   }
-  
+
+  @font-face{
+    font-family: Sansation;
+    src: url(css/fonts/sansation/Sansation_Regular.ttf);
+}
+@font-face{
+    font-family: Sansation;
+    src: url(css/fonts/sansation/Sansation_Bold.ttf);
+    font-weight: bold;
+}
+@font-face{
+    font-family: Sansation;
+    src: url(css/fonts/sansation/Sansation_Italic.ttf);
+    font-style: italic;
+}
+@font-face{
+    font-family: Sansation;
+    src: url(css/fonts/sansation/Sansation_Bold_Italic.ttf);
+    font-weight: bold;
+    font-style: italic;
+}   
+*{
+    font-family: Sansation;
+}
+body{
+    background-image: url(media/fondo-azul-verdoso-377-copia.jpg);
+}
+.button {
+    background-color: #019592;
+}
+
+
+.c{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+img{
+    
+}
+form{
+    position: relative;
+    top: 20px;
+}

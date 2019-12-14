@@ -5,19 +5,18 @@ import random
 import string
 from datetime import date
 
-
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd="y@cine2012",
   database="esisba_login"
 )
+
 mycursor = mydb.cursor()
 mycursor.execute("SELECT username FROM teachers")
 
-
 usernames = mycursor.fetchone()
-
+loggedin = False
 @app.route('/', methods=['GET', 'POST'])
 def login_view():
     if request.method == 'POST':  #this block is only entered when the form is submitted
@@ -28,7 +27,8 @@ def login_view():
                 mycursor.execute("SELECT Password FROM teachers WHERE username ='{}'".format(x))
                 passwords = mycursor.fetchone()[0]
                 if password == passwords:
-                    return redirect(url_for('dashboard'))
+                    loggedin = True
+                    return dashboard()
                 else:
                     return '''<h1>username is: {}</h1>
                             <h1>password is: {}</h1>
@@ -42,17 +42,23 @@ def login_view():
                             <h2>username: {}</h2>'''.format(username, password,x)
     return render_template("index.html") 
 
-@app.route('/dashboard', methods=['GET', 'POST'])
+@app.route('/dashboard/', methods=['GET', 'POST'])
 def dashboard():
-    if request.method == 'POST':
-        return redirect(url_for('gqr'))
-        gqr()
-    return render_template("dashboard.html")
-    
+    if loggedin == True:
+        return render_template("dashboard.html")
+    else:
+        login_view()
 
-@app.route('/gqr', methods=['GET', 'POST'])
+    if request.method == 'POST':
+        generateqrcode()
+        gqr()
+
+@app.route('/gqr/', methods=['GET', 'POST'])
 def gqr():
-    return render_template("gqr.html")
+    if loggedin == True:
+        return render_template("gqr.html")
+    else:
+        login_view()
 
 
 
@@ -60,9 +66,7 @@ def randomString(stringLength=20):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
-
-qrcode =''
-def generateqrcode(qrcode):
+def generateqrcode()
     student = mydb.cursor()
     qrcode = randomString(20)
     today = date.today()
@@ -70,12 +74,3 @@ def generateqrcode(qrcode):
     val = (today, qrcode)
     execute(sql, val)
     mydb.commit()
-
-@app.route('/api/student', methods=['POST']) #GET requests will be blocked
-def json_example():
-    req_data = request.get_json()
-    qrcoderecived = req_data['qrcodesent']
-    if qrcoderecived == qrcode :
-        return 'Present'
-    else :
-        return 'Error'
